@@ -1,0 +1,40 @@
+Begin ModelPartData
+    DOMAIN_SIZE 3
+End ModelPartData
+
+Begin Properties 1
+End Properties
+
+Begin Nodes
+    1  0.0  0.0  0.0
+    2  1.0  0.0  0.0
+End Nodes
+
+Begin Elements TrussLinearElement3D2N
+    1  1  1  2
+End Elements
+
+Begin Conditions PointLoadCondition3D1N
+    1  1  2
+End Conditions
+
+Begin SubModelPart Supports
+    Begin SubModelPartNodes
+        1
+    End SubModelPartNodes
+End SubModelPart
+
+Begin SubModelPart Roller
+    Begin SubModelPartNodes
+        2
+    End SubModelPartNodes
+End SubModelPart
+
+Begin SubModelPart LoadPoint
+    Begin SubModelPartNodes
+        2
+    End SubModelPartNodes
+    Begin SubModelPartConditions
+        1
+    End SubModelPartConditions
+End SubModelPart

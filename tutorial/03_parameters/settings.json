@@ -1,0 +1,10 @@
+{
+    "solver_settings": {
+        "solver_type": "static",
+        "echo_level": 1,
+        "time_stepping": {
+            "time_step": 0.25
+        }
+    },
+    "loads": [100.0, 250.0, 500.0]
+}

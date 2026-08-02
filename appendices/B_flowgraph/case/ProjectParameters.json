@@ -1,0 +1,99 @@
+{
+    "orchestrator": {
+        "name": "Orchestrators.KratosMultiphysics.SequentialOrchestrator",
+        "settings": {
+            "echo_level": 0,
+            "execution_list": ["one_bar"],
+            "load_from_checkpoint": null,
+            "stage_checkpoints": false
+        }
+    },
+    "stages": {
+        "one_bar": {
+            "stage_preprocess": {},
+            "stage_postprocess": {},
+            "stage_settings": {
+                "analysis_stage": "KratosMultiphysics.StructuralMechanicsApplication.structural_mechanics_analysis",
+                "problem_data": {
+                    "problem_name": "flowgraph_multistage_truss",
+                    "parallel_type": "OpenMP",
+                    "start_time": 0.0,
+                    "end_time": 1.0,
+                    "echo_level": 0
+                },
+                "solver_settings": {
+                    "solver_type": "static",
+                    "model_part_name": "Structure",
+                    "domain_size": 3,
+                    "analysis_type": "linear",
+                    "model_import_settings": {
+                        "input_type": "mdpa",
+                        "input_filename": "truss"
+                    },
+                    "material_import_settings": {
+                        "materials_filename": "Materials.json"
+                    },
+                    "time_stepping": {
+                        "time_step": 1.0
+                    },
+                    "linear_solver_settings": {
+                        "solver_type": "skyline_lu_factorization"
+                    },
+                    "compute_reactions": true,
+                    "move_mesh_flag": false
+                },
+                "processes": {
+                    "constraints_process_list": [
+                        {
+                            "python_module": "assign_vector_variable_process",
+                            "kratos_module": "KratosMultiphysics",
+                            "Parameters": {
+                                "model_part_name": "Structure.Supports",
+                                "variable_name": "DISPLACEMENT",
+                                "constrained": [true, true, true],
+                                "value": [0.0, 0.0, 0.0],
+                                "interval": [0.0, "End"]
+                            }
+                        },
+                        {
+                            "python_module": "assign_scalar_variable_process",
+                            "kratos_module": "KratosMultiphysics",
+                            "Parameters": {
+                                "model_part_name": "Structure.Roller",
+                                "variable_name": "DISPLACEMENT_Y",
+                                "constrained": true,
+                                "value": 0.0,
+                                "interval": [0.0, "End"]
+                            }
+                        },
+                        {
+                            "python_module": "assign_scalar_variable_process",
+                            "kratos_module": "KratosMultiphysics",
+                            "Parameters": {
+                                "model_part_name": "Structure.Roller",
+                                "variable_name": "DISPLACEMENT_Z",
+                                "constrained": true,
+                                "value": 0.0,
+                                "interval": [0.0, "End"]
+                            }
+                        }
+                    ],
+                    "loads_process_list": [
+                        {
+                            "python_module": "assign_vector_variable_process",
+                            "kratos_module": "KratosMultiphysics",
+                            "Parameters": {
+                                "model_part_name": "Structure.LoadPoint",
+                                "variable_name": "POINT_LOAD",
+                                "constrained": false,
+                                "value": [1000.0, 0.0, 0.0],
+                                "interval": [0.0, "End"]
+                            }
+                        }
+                    ]
+                },
+                "output_processes": {}
+            }
+        }
+    }
+}

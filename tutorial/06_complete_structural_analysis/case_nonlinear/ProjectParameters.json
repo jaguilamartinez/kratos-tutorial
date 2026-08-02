@@ -1,0 +1,75 @@
+{
+    "problem_data": {
+        "problem_name": "finite_deformation_truss",
+        "parallel_type": "OpenMP",
+        "start_time": 0.0,
+        "end_time": 1.0,
+        "echo_level": 0
+    },
+    "solver_settings": {
+        "solver_type": "static",
+        "model_part_name": "Structure",
+        "domain_size": 3,
+        "analysis_type": "non_linear",
+        "model_import_settings": {
+            "input_type": "mdpa",
+            "input_filename": "truss_nonlinear"
+        },
+        "material_import_settings": {
+            "materials_filename": "../case/Materials.json"
+        },
+        "time_stepping": {"time_step": 1.0},
+        "linear_solver_settings": {"solver_type": "skyline_lu_factorization"},
+        "convergence_criterion": "residual_criterion",
+        "residual_relative_tolerance": 1.0e-10,
+        "residual_absolute_tolerance": 1.0e-6,
+        "max_iteration": 30,
+        "compute_reactions": true,
+        "move_mesh_flag": true
+    },
+    "processes": {
+        "constraints_process_list": [
+            {
+                "python_module": "assign_vector_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Supports",
+                    "variable_name": "DISPLACEMENT",
+                    "constrained": true,
+                    "value": [0.0, 0.0, 0.0]
+                }
+            },
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Roller",
+                    "variable_name": "DISPLACEMENT_Y",
+                    "constrained": true,
+                    "value": 0.0
+                }
+            },
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Roller",
+                    "variable_name": "DISPLACEMENT_Z",
+                    "constrained": true,
+                    "value": 0.0
+                }
+            }
+        ],
+        "loads_process_list": [{
+            "python_module": "assign_vector_variable_process",
+            "kratos_module": "KratosMultiphysics",
+            "Parameters": {
+                "model_part_name": "Structure.LoadPoint",
+                "variable_name": "POINT_LOAD",
+                "constrained": false,
+                "value": [1000000000.0, 0.0, 0.0]
+            }
+        }]
+    },
+    "output_processes": {}
+}

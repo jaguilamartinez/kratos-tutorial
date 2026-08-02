@@ -1,0 +1,70 @@
+{
+    "problem_data": {
+        "problem_name": "ramped_truss",
+        "parallel_type": "OpenMP",
+        "start_time": 0.0,
+        "end_time": 4.0,
+        "echo_level": 0
+    },
+    "solver_settings": {
+        "solver_type": "static",
+        "model_part_name": "Structure",
+        "domain_size": 3,
+        "analysis_type": "linear",
+        "model_import_settings": {
+            "input_type": "mdpa",
+            "input_filename": "truss"
+        },
+        "material_import_settings": {
+            "materials_filename": "Materials.json"
+        },
+        "time_stepping": {"time_step": 1.0},
+        "linear_solver_settings": {"solver_type": "skyline_lu_factorization"},
+        "compute_reactions": true,
+        "move_mesh_flag": false
+    },
+    "processes": {
+        "constraints_process_list": [
+            {
+                "python_module": "assign_vector_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Supports",
+                    "variable_name": "DISPLACEMENT",
+                    "constrained": true,
+                    "value": [0.0, 0.0, 0.0]
+                }
+            },
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Roller",
+                    "variable_name": "DISPLACEMENT_Y",
+                    "constrained": true,
+                    "value": 0.0
+                }
+            },
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "Structure.Roller",
+                    "variable_name": "DISPLACEMENT_Z",
+                    "constrained": true,
+                    "value": 0.0
+                }
+            }
+        ],
+        "custom_load_process_list": [{
+            "python_module": "ramp_load_process",
+            "Parameters": {
+                "model_part_name": "Structure.LoadPoint",
+                "start_load": 0.0,
+                "end_load": 1000.0,
+                "interval": [0.0, 4.0]
+            }
+        }]
+    },
+    "output_processes": {}
+}

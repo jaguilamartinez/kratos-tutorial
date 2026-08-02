@@ -1,0 +1,15 @@
+{
+    "properties": [{
+        "model_part_name": "ThermalDomain",
+        "properties_id": 1,
+        "Material": {
+            "Variables": {
+                "DENSITY": 1.0,
+                "CONDUCTIVITY": 10.0,
+                "SPECIFIC_HEAT": 1.0,
+                "HEAT_FLUX": 0.0
+            },
+            "Tables": {}
+        }
+    }]
+}

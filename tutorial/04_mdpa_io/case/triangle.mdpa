@@ -1,0 +1,47 @@
+Begin ModelPartData
+    DOMAIN_SIZE 2
+End ModelPartData
+
+Begin Properties 1
+End Properties
+
+Begin Nodes
+    1  0.0  0.0  0.0
+    2  1.0  0.0  0.0
+    3  0.0  1.0  0.0
+End Nodes
+
+Begin Elements Element2D3N
+    1  1  1  2  3
+End Elements
+
+Begin Conditions LineCondition2D2N
+    1  1  1  3
+End Conditions
+
+Begin NodalData TEMPERATURE
+    1  0  100.0
+    2  0   50.0
+    3  0  100.0
+End NodalData
+
+Begin SubModelPart HotBoundary
+    Begin SubModelPartNodes
+        1
+        3
+    End SubModelPartNodes
+    Begin SubModelPartConditions
+        1
+    End SubModelPartConditions
+End SubModelPart
+
+Begin SubModelPart Domain
+    Begin SubModelPartNodes
+        1
+        2
+        3
+    End SubModelPartNodes
+    Begin SubModelPartElements
+        1
+    End SubModelPartElements
+End SubModelPart

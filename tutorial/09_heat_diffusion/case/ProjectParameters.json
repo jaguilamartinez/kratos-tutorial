@@ -1,0 +1,59 @@
+{
+    "problem_data": {
+        "problem_name": "steady_square_diffusion",
+        "parallel_type": "OpenMP",
+        "start_time": 0.0,
+        "end_time": 1.0,
+        "echo_level": 0
+    },
+    "solver_settings": {
+        "solver_type": "stationary",
+        "model_part_name": "ThermalDomain",
+        "domain_size": 2,
+        "analysis_type": "linear",
+        "model_import_settings": {
+            "input_type": "mdpa",
+            "input_filename": "square"
+        },
+        "material_import_settings": {
+            "materials_filename": "Materials.json"
+        },
+        "time_stepping": {"time_step": 1.0},
+        "linear_solver_settings": {"solver_type": "skyline_lu_factorization"},
+        "element_replace_settings": {
+            "element_name": "LaplacianElement",
+            "condition_name": "ThermalFace"
+        },
+        "problem_domain_sub_model_part_list": ["Domain"],
+        "processes_sub_model_part_list": ["ColdBoundary", "HotBoundary"],
+        "assign_neighbour_elements_to_conditions": false,
+        "compute_reactions": true
+    },
+    "processes": {
+        "boundary_conditions": [
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "ThermalDomain.ColdBoundary",
+                    "variable_name": "TEMPERATURE",
+                    "constrained": true,
+                    "value": 0.0,
+                    "interval": [0.0, "End"]
+                }
+            },
+            {
+                "python_module": "assign_scalar_variable_process",
+                "kratos_module": "KratosMultiphysics",
+                "Parameters": {
+                    "model_part_name": "ThermalDomain.HotBoundary",
+                    "variable_name": "TEMPERATURE",
+                    "constrained": true,
+                    "value": 100.0,
+                    "interval": [0.0, "End"]
+                }
+            }
+        ]
+    },
+    "output_processes": {}
+}
